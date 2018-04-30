@@ -1,6 +1,6 @@
 # bashRadio
-# David Cote | MIT License 2018
-## This is a internet radio in Bash script 4 designed for the Raspberry Pi running on Raspbian.
+### David Cote | MIT License 2018
+### This is a internet radio in Bash script 4 designed for the Raspberry Pi running on Raspbian.
 The intent behind this project was to familiarize myself with Linux and Bash scripting.
 I didn't want to use Python or other programming languages.
 
@@ -11,7 +11,7 @@ I got a ground loop isolator and plugged speakers to the pi to remove interferen
 
 ### The next step might be a webscraper in Python that finds all the available radios online.
 
-##Known bugs
+## Known bugs
 The code to play local files doesn't catch the right PID process. I suspect it's because I use the 'find' command.
 There's no error catching. So if the radio stream is dead it won't tell you. It just won't start.
 The volume control option only open Alsamixer which causes the radio script to exit. The volume up and down are working fine.
