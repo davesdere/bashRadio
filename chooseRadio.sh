@@ -18,7 +18,10 @@
 #for sound in "${!animals[@]}"; do echo "$sound - ${animals[$sound]}"; done
 #echo "${animals[moo]}"
 
+## Take note that if you modify those text files names
+## you will have to change it everywhere it the script.
 RADIOLIST=radioList.txt
+FAVORITES=favRadio.txt
 #echo First column of a text file
 #echo `grep -Eo '^[^ ]+'favRadio.txt`
 
@@ -52,6 +55,7 @@ RADIOLIST=radioList.txt
 #readarray myarray < file_pathname # Include newline.
 #readarray -t myarray < file_pathname # Exclude newline.
 ################################################
+
 kill_radio()
 {
     echo "Turning off channel"
@@ -61,7 +65,7 @@ kill_radio()
 }
 list_radios()
 {
-    awk '{print NR": "$0}' radioList.txt 
+    awk '{print NR": "$0}' $1 
     #awk '{print i++ " - " $1 "\t" $2}' radioList.txt
 }
 find_radiourl()
@@ -115,13 +119,16 @@ read -p "What do we do ? : " choice
 echo "######################################################################"
 if test "$choice" == "play"
 then
-    list_radios
+    list_radios $RADIOLIST
     #read -n 1
     read -p "Enter the number you want to play : " radioChoice
     kill_radio
     find_radiourl $radioChoice
     play_radio $urlnow
-
+fi
+if test "$choice" == "list"
+then
+    list_radios $FAVORITES
 fi
 if test "$choice" == "local"
 then
@@ -145,14 +152,14 @@ then
     echo "Classical: cl,cl2,cl3(beethoven), cl4, cl5, piano"
     echo "Bachata : latin   | Hindi Bollywood: hindi"
     echo "Ambient : amb1, amb2    | Top 40 : t"
-    echo `cat -n favRadio.txt` 
-    read -p "Enter the number you want to play : " lineNumber
-    varA="p"
-    varB=$lineNumber$varA
-    sed -n "$varB" favRadio.txt > bozo.tmp 
-    awk '{print $1 "\t" $2}' bozo.tmp
-    urltest=`awk '{print $2}' bozo.tmp`
-    echo "URL is: $urltest"
+   # echo `cat -n favRadio.txt` 
+   # read -p "Enter the number you want to play : " lineNumber
+   # varA="p"
+   # varB=$lineNumber$varA
+   # sed -n "$varB" favRadio.txt > bozo.tmp 
+   # awk '{print $1 "\t" $2}' bozo.tmp
+   # urltest=`awk '{print $2}' bozo.tmp`
+   # echo "URL is: $urltest"
 fi
 if test "$choice" == "lr"
 then
@@ -174,13 +181,14 @@ fi
 
 if test "$choice" == "fr"
 then
-    echo "$RADIONAME, $urlnow" >> favRadio.txt
+    #echo "$RADIONAME, $urlnow" >> favRadio.txt
+    echo "$RADIONAME, $urlnow" >> $FAVORITES
     echo $current " is now in your favorites"
     echo `cat favRadio.txt` 
 fi
 if test "$choice" == "f"
 then
-    echo `cat -n favRadio.txt` 
+    list_radios $RADIOLIST 
 fi
 if test "$choice" == "fx"
 then
@@ -229,9 +237,10 @@ then
 fi
 if test "$choice" == "k"
 then
-    echo "See ya!"
-    kill `cat save_pid.txt`
-    rm save_pid.txt
+    kill_radio
+    #echo "See ya!"
+    #kill `cat save_pid.txt`
+    #rm save_pid.txt
 fi
 ## Hard coded shortcuts for radios
 if test "$choice" == "vpr"
